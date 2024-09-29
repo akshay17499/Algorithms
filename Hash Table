@@ -1,0 +1,89 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct node
+{
+    int index;
+    int data;
+    struct node*next;
+}node;
+
+ node hash_table[100];
+
+node* create_node(int val,int index)
+{
+    node*newnode;
+    newnode=(node*)malloc(sizeof(node));
+    newnode->data=val;
+    newnode->next=NULL;
+    newnode->index=index;
+    return newnode;
+}
+
+void display(int size)
+{
+   
+    for(int i=0;i<size;i++)
+    {
+        printf(" %d",hash_table[i].index);
+        if(hash_table[i].next!=NULL)
+        {
+            node*temp1=hash_table[i].next;
+            while(temp1!=NULL)
+            {
+                //printf("->%d",temp1->index);
+                 printf("->%d",temp1->data);
+                temp1=temp1->next;
+            }
+        }
+       
+    }
+}
+
+int create_hash_table(int*arr,int size,int target)
+{
+    
+    for(int i=0;i<size;i++)
+    {
+        hash_table[i].next=NULL;
+        hash_table[i].index=-1;
+    }
+      for(int i =0;i<size;i++)
+        {
+            int num = (arr[i]%size+size)%size;
+            printf("num->%d\n",num);
+            if(hash_table[num].index==-1)
+            {
+               hash_table[num].data=arr[i];
+               hash_table[num].index=i;
+            }
+            else if(hash_table[num].next==NULL)
+            {
+                hash_table[num].next=create_node(arr[i],i);
+            }
+            else
+            {
+                node*temp=hash_table[num].next;
+                while(temp->next!=NULL)
+                {
+                    temp=temp->next;
+                }
+                temp->next=create_node(arr[i],i);
+            }
+        }
+        display(size);
+}  
+
+int main()
+{
+    int target;
+    scanf("%d",&target);
+    int size;
+    scanf("%d",&size);
+    int arr[size];
+    for(int i =0;i<size;i++)
+    {
+        scanf("%d",&arr[i]);
+    }
+int n = create_hash_table(arr,size,target) ;
+}
