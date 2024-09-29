@@ -1,0 +1,38 @@
+#include <stdio.h>
+#include<string.h>
+
+int lenght_of_longest_substring(char*arr)
+{
+    int start=0;
+    int max=0;
+    int lastindex[128];
+    for(int i=0;i<128;i++)
+    {
+        lastindex[i]=-1;
+    }
+    int n= strlen(arr);
+    for(int i = 0; i < n; i++)
+    {
+        char current_char=arr[i];
+        if(lastindex[(int)current_char]>=start)
+        {
+            start=lastindex[(int)current_char]+1;
+        }
+        lastindex[(int)current_char]=i;
+        int current_length = i-start+1;
+        if(current_length>max)
+        {
+            max=current_length;
+        }
+    }
+    return max;
+}
+int main() {
+    char arr[100];
+    printf("enter string : ");
+    scanf("%s",arr);
+    int length =  lenght_of_longest_substring(arr);
+    printf("length of longest non-repeating string : %d",length);
+
+    return 0;
+}
