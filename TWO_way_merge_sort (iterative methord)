@@ -1,0 +1,72 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+void merge(int * arr,int left,int mid,int right)
+{
+    int n1 = mid-left+1;
+    int n2 = right - mid;
+    
+    int *Larr=(int*)malloc(n1*sizeof(int));
+    int *Rarr = (int*)malloc(n2*sizeof(int));
+    
+    for(int i = 0;i < n1;i++)
+    Larr[i]=arr[left+i];
+    for(int i = 0;i < n2; i++)
+    Rarr[i]=arr[mid+i+1];
+    
+    
+    int i=0,j=0,k=left;
+    
+    while(i<n1&&j<n2)
+    {
+        if(Larr[i]>Rarr[j])
+        arr[k++]=Rarr[j++];
+        else
+        arr[k++]=Larr[i++];
+    }
+    
+    while(i<n1)
+    arr[k++]=Larr[i++];
+    
+    while(j<n2)
+    arr[k++]=Rarr[j++];
+    
+    free(Larr);
+    free(Rarr);
+}
+
+void two_way_merge_sort(int*arr,int size)
+{
+    for(int i = 1; i < size;i = i*2)
+    {
+        for(int left = 0; left < size-1; left = left+2*i)
+        {
+            int mid = left + i - 1;
+            
+            int  right = (left+2*i-1)<(size-1)?(left+2*i-1):(size-1);
+            
+            merge(arr,left,mid,right);
+        }
+    }
+}
+
+int main()
+{
+    int size;
+    printf("enter array size : ");
+    scanf("%d",&size);
+    int arr[size];
+    printf("enter array elements : ");
+    for(int i = 0;i<size;i++)
+    {
+        scanf("%d",&arr[i]);
+    }
+    two_way_merge_sort(arr,size);
+    
+    printf("Array after sort : ");
+    for(int i = 0;i < size; i++)
+    {
+        printf("%d ",arr[i]);
+    }
+    return 0;
+}
