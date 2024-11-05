@@ -1,0 +1,136 @@
+#include <stdio.h>
+#include<stdlib.h>
+void add(void*vptr,int v_size,int *c_size,int *count,char *size)
+{
+    int op;
+    printf("Enter the type you have to insert: \n1. int\n2. char\n3. float\n4. double\nChoice ----> ");
+    scanf("%d",&op);
+    switch(op)
+    {
+        case 1 : if(*c_size+4>8)
+                 {
+                     printf("remaning bytes avaliable is only %d\n",8-*c_size);
+                     return;
+                 }
+                 scanf("%d",(int*)(vptr+*c_size));
+                 *c_size +=4;
+                 size[(*count)++]='i';
+                 break;
+        case 2 : if(*c_size+1>8)
+                 {
+                     printf("remaning bytes avaliable is only %d\n",8-*c_size);
+                     return;
+                 }
+                 scanf(" %c",(char*)(vptr+*c_size));
+                 *c_size +=1;
+                  size[(*count)++]='c';
+                 break;
+        case 3 : if(*c_size+4>8)
+                 {
+                     printf("remaning bytes avaliable is only %d\n",8-*c_size);
+                     return;
+                 }
+                 scanf("%f",(float*)(vptr+*c_size));
+                 *c_size +=4;
+                  size[(*count)++]='f';
+                 break;
+        case 4 : if(*c_size+8>8)
+                 {
+                     printf("remaning bytes avaliable is only %d\n",8-*c_size);
+                     return;
+                 }
+                 scanf("%lf",(double*)(vptr+*c_size));
+                 *c_size +=8;
+                  size[(*count)++]='d';
+    }
+    
+}
+void display (void*vptr,char*size,int count)
+{
+    int c_size=0;
+    int j=1;
+   for(int i=0;i<count;i++)
+   {
+       switch(size[i])
+       {
+           case 'i' : printf("%d. %d (int)\n",j++,*(int*)(vptr+c_size));
+                      c_size +=4;
+                      break;
+           case 'c' : printf("%d. %c (char)\n",j++,*(char*)(vptr+c_size));
+                      c_size +=1;
+                      break;
+           case 'f' : printf("%d. %f (float)\n",j++,*(float*)(vptr+c_size));
+                      c_size +=4;
+                      break;
+           case 'd' : printf("%d. %lf (double)\n",j++,*(double*)(vptr+c_size));
+                      c_size +=8;
+       }
+   }
+}
+void* delete(void* vptr,int* c_size,int* count,char* size)
+{
+    display(vptr,size,*count);
+    printf("enter the index value to be deleted\n");
+    int index_d;
+    scanf("%d",&index_d);
+    char ch=size[index_d-1];
+    int d_size;
+    switch(ch)
+    {
+        case 'f' :
+        case 'i' : d_size=4;break;
+        case 'c' : d_size=1;break;
+        case 'd' : d_size=8;
+    }
+    int first_p=0;
+    for(int i=0;i<*count;i++)
+    {
+      
+      if(i==index_d-1)
+      {
+        for(int j=i;j<*count;j++)
+        {
+            size[j]=size[j+1];
+        }
+        break;
+      }
+      if(i>-1){
+        if(size[i]=='i'||size[i]=='f')
+        first_p+=4;
+        else if(size[i]=='c')
+        first_p+=1;
+        else
+        first_p+=8;
+      }
+    }
+    *count -=1;
+   
+     for(int i=0;i<d_size;i++)
+      {
+        for(int j=first_p;j<*c_size-1;j++)
+        {
+            *((char*)vptr+j) = *((char*)vptr+j+1);
+        }
+       
+      }
+      *c_size-=d_size;
+}
+int main() {
+    void *vptr=malloc(8);
+    int op;
+    int c_size=0;
+    char size[8]={0};
+    int count=0;
+    while(1)
+    { printf("Menu : \n1. Add element\n2. Remove element\n3. Display element\n4. Exit from the program\n\nChoice ----> ");
+        scanf("%d",&op);
+        switch(op)
+        {
+            case 1 : add(vptr,8,&c_size,&count,size);break;
+            case 2 : delete(vptr,&c_size,&count,size);break;
+            case 3 : display(vptr,size,count);break;
+            case 4 : return 0;
+            
+        }
+    }
+}
