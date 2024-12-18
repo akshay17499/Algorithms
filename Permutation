@@ -1,0 +1,66 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+
+void print(int*arr,int size)
+{
+    for(int i = 0;i < size;i++)
+    printf("%d ",arr[i]);
+    printf("\n");
+}
+
+void swap(int*num1,int*num2)
+{
+    int temp = *num1;
+    *num1 = *num2;
+    *num2 = temp;
+}
+
+bool next_permutation(int*arr,int size)
+{
+    int i = size-2;
+
+    while(i>=0&&arr[i]>=arr[i+1])
+    i--;
+    if(i==-1)
+    return false;
+
+    int j = size-1;
+
+    while(arr[i]>=arr[j])
+    j--;
+
+    swap(&arr[i],&arr[j]);
+
+    int left = i+1;
+    int right = size-1;
+    while(left<right)
+    {
+        swap(&arr[left],&arr[right]);
+        left++;
+        right--;
+    }
+    return true;
+}
+
+void permutation(int*arr,int size)
+{
+    print(arr,size);
+    while(next_permutation(arr,size))
+    {
+        print(arr,size);
+    }
+}
+
+int main()
+{
+    printf("enter size : ");
+    int size;
+    scanf("%d",&size);
+
+    printf("array elements : ");
+    int arr[size];
+    for(int i=0;i<size;i++)
+    scanf("%d",arr+i);
+    permutation(arr,size);
+}
