@@ -1,20 +1,5 @@
 #include<stdio.h>
-
-void heapify(int*arr,int size)
-{
-    int parent = (size-1)/2;
-    while(size>0)
-    {
-       if(arr[parent]<arr[size])
-       {
-        int temp = arr[parent];
-        arr[parent] = arr[size];
-        arr[size] = temp;
-       }
-     size--;
-    }
-}
-void max_heap(int*arr,int last,int first)
+void heapify(int*arr,int last,int first)
 {
     int largest = first;
     int l = (2*first +1);
@@ -29,19 +14,19 @@ void max_heap(int*arr,int last,int first)
      int temp = arr[largest];
         arr[largest] = arr[first];
         arr[first] = temp;
-        max_heap(arr,last,first);
+       heapify(arr,last,first);
    }
 }
 void heap_sort(int*arr,int size)
 {
-   for(int i=size-1;i>=0;i--)
-    heapify(arr,i);
+   for(int i=size/2-1;i>=0;i--)
+    heapify(arr,size,i);
     for(int i=size-1;i>0;i--)
     {
         int temp = arr[i];
         arr[i] = arr[0];
         arr[0] = temp;
-        max_heap(arr,i,0);
+        heapify(arr,i,0);
     }
 }
 int main()
@@ -53,6 +38,7 @@ int main()
     printf("enter array elements : ");
     for(int i=0;i<size;i++)
     scanf("%d",arr+i);
+    heap_sort(arr,size);
     printf("sorted array : ");
     for(int i=0;i<size;i++)
     printf(" %d",arr[i]);
