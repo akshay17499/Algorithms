@@ -1,0 +1,80 @@
+#include<stdio.h>
+#define MAX 100
+typedef struct node{
+  int arr[MAX];
+  int size;
+}pQueue;
+
+void swap(int*a,int*b)
+{
+  int temp = *a;
+  *a=*b;
+  *b=temp;
+}
+
+void insertion(pQueue*queue,int data)
+{
+  if(queue->size==MAX)
+  {
+    printf("overflow\n");
+    return;
+  }
+  queue->arr[queue->size++] = data;
+  int parent;
+  int i = queue->size-1;
+  while(i>0)
+  {
+    parent = (i-1)/2;
+    if(queue->arr[parent]<queue->arr[i])
+    {
+      swap(&queue->arr[parent],&queue->arr[i]);
+      i=parent;
+    }
+    else 
+    break;
+  }
+}
+
+int delete_queue(pQueue*queue)
+{
+  if(queue->size==0)
+  {
+    printf("under flow");
+    return -1;
+  }
+  int first = queue->arr[0];
+  queue->arr[0] = queue->arr[queue->size--];
+  int i=0;
+  while(2*i+1<queue->size)
+  {
+    int left = 2*i+1,right = 2*i + 2,largest = left;
+
+    if(right<2*i+1&&queue->arr[right]>queue->arr[left])
+    largest=right;
+    if(queue->arr[i]>queue->arr[largest])
+    break;
+    swap(&queue->arr[i],&queue->arr[largest]);
+    i=largest;
+  }
+  return first;
+}
+
+int main()
+{
+  int size;
+  printf("enter size : ");
+  scanf("%d",&size);
+  int arr[size];
+  printf("enter array elements : ");
+  for(int i=0;i<size;i++)
+  scanf("%d",arr+i);
+  pQueue queue;
+  queue.size=0;
+  for(int i=0;i<size;i++)
+  {
+    insertion(&queue,arr[i]);
+  }
+
+  int num = delete_queue(&queue);
+  printf("largest element in the heap : %d",num);
+}
