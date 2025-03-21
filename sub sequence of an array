@@ -1,0 +1,32 @@
+#include<stdio.h>
+
+
+void sub_sequence(int*arr,int size,int index,int*sub_arr,int sub_index)
+{
+    if(index == size)
+    {
+        for(int i=0;i<sub_index;i++)
+        {
+            printf("%d ",sub_arr[i]);
+        }
+        printf("\n");
+    }else{
+        sub_arr[sub_index] = arr[index];
+        sub_sequence(arr,size,index+1,sub_arr,sub_index+1);
+        sub_sequence(arr,size,index+1,sub_arr,sub_index);
+    }
+}
+int main()
+{
+    printf("enter size : ");
+    int size;
+    scanf("%d",&size);
+    printf("enter array elements : ");
+    int arr[size];
+    for(int i=0;i<size;i++)
+    scanf("%d",arr+i);
+
+    printf("subsequences are : \n");
+    int sub_arr[size];
+    sub_sequence(arr,size,0,sub_arr,0);
+}
